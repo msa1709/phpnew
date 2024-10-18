@@ -2,12 +2,15 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     
 
     <title>Registration Form</title>
@@ -23,7 +26,9 @@
         $email = $_POST["email"];
         $password = $_POST["password"];
         $passwordRepeat = $_POST["repeat_password"];
-        $userType = $_POST["user_type"];
+        $userType = $_POST["user_type"];  
+        
+       
      
         
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -71,7 +76,11 @@
         if (count($errors) === 0) {
             $imageNewName = uniqid('', true) . "." . $imageActualExt;
             $imageDestination = 'uploads/' . $imageNewName;
-            move_uploaded_file($imageTmpName, $imageDestination);
+            move_uploaded_file($imageTmpName, $imageDestination);  
+
+            $baseurls = "http://localhost:8080/login-registerau/"; 
+            $imagepath = $baseurls . $imageDestination;
+
         }
     } else {
         array_push($errors, "Please upload a profile image");
@@ -95,10 +104,22 @@
          $stmt = mysqli_stmt_init($conn);
          $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
          if ($prepareStmt) {
-             mysqli_stmt_bind_param($stmt,"sssss",$fullName, $email, $passwordHash, $userType, $imageDestination);
+             mysqli_stmt_bind_param($stmt,"sssss",$fullName, $email, $passwordHash, $userType, $imagepath);
              mysqli_stmt_execute($stmt);
-             echo "<div class='alert alert-success'>You are registered successfully.</div>";
-             header("Location: login.php");
+             //echo "<div class='alert alert-success'>You are registered successfully.</div>";
+             echo "<script>
+                        swal({
+                            title: 'Registered Successfully!',
+                            text: 'You have successfully registered.',
+                            icon: 'success',
+                            button: 'OK'
+                        }).then(function() {
+                            window.location.href = 'login.php';
+                        });
+                    </script>";
+
+
+             //header("Location: login.php");
              exit();
          }else{
              die("Something went wrong");
@@ -147,17 +168,26 @@
        
 
             <div class="form-btn">
-                <input type="submit" class="btn btn-primary" value="Register" name="submit">
+                <input type="submit" class="btn btn-primary"  value="Register" name="submit">
             </div> <br> 
+
+
            
             
           
-    </form> <br>
+    </form> <br>  
+
+    
+
      <div>
         <div><p>Already Registered <a href="login.php">Login Here</a></p></div>
       </div>
 
 
 </div>
+
+
+
 </body>
-</html>
+
+</html> 

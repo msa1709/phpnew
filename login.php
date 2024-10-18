@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: index.php");
+   header("Location: index.php"); 
+   exit();
 }
 ?>
 
@@ -11,12 +12,14 @@ if (isset($_SESSION["user"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title> 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
         <?php
+      
         if (isset($_POST["login"])) {
            $email = $_POST["email"];
            $password = $_POST["password"];
@@ -27,14 +30,26 @@ if (isset($_SESSION["user"])) {
             $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
             if ($user) {
                 if (password_verify($password, $user["password"])) {
-                    session_start();
+                   
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['user_type'] = $user['user_type'];
+                    echo "<script>
+                            swal({
+                                title: 'Login Successful',
+                                text: 'Welcome back!',
+                                icon: 'success',
+                                button: 'OK'
+                            }).then(function() {
+                                window.location.href = 'index.php';
+                            });
+                          </script>";
+               
+                     
                   
                     
  
-                    header("Location: index.php");
-                    die();
+                    //header("Location: index.php");
+                    exit();
                 }else{
                     echo "<div class='alert alert-danger'>Password does not match</div>";
                 }

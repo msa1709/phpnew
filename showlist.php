@@ -46,13 +46,13 @@
         </header>
      
         
-        <table class="table table-bordered table-sm">
+        <table class="table table-bordered border-danger table-sm">
         <thead>
             <tr class="table-dark">
                 <th style="width:10%">id</th>
                 <th style="width:10%">Productname</th>
                 <th style="width:10%">Producttype</th> 
-                <th style="width:20%">Profile_image</th>
+                <th style="width:20%">Product_image</th>
                 <th>Function</th>
                 <!-- <th>Action</th>  -->
             </tr>
@@ -69,7 +69,7 @@
                 <td><?php echo $data['id']; ?></td>
                 <td><?php echo $data['product_name']; ?></td>
                 <td><?php echo $data['product_type']; ?></td> 
-                <td><?php echo $data['profile_image']; ?></td>
+                <td><?php echo $data['product_image']; ?></td>
            
                 <td>
                  

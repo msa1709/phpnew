@@ -1,0 +1,6 @@
+16/10/2024 
+
+Added a new column  profile_image  in users table 
+
+Added a new column  product_image  in products table
+

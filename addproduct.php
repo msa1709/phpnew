@@ -5,8 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Check if the user is logged in and is an admin
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
-    // If the user is not an admin, redirect to another page or show an error
-    header("Location: login.php"); // Redirect to login page or another appropriate page
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -17,6 +16,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <title>Add New Book</title>
 </head>
@@ -26,6 +26,42 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
   <?php require 'index.php'; ?>
 
     <div class="container my-5"> 
+        <?php 
+        include('connect.php');
+        if (isset($_POST["submit"])) {
+            /*$title = mysqli_real_escape_string($conn, $_POST["title"]);
+            $type = mysqli_real_escape_string($conn, $_POST["type"]);*/
+            $productname = mysqli_real_escape_string($conn, $_POST["productname"]);
+            $producttype = mysqli_real_escape_string($conn, $_POST["producttype"]);
+            $profile_image = mysqli_real_escape_string($conn, $_POST["profile_image"]);
+
+            $sqlInsert = "INSERT INTO products(product_name,product_type,product_image) VALUES ('$productname','$producttype', '$profile_image')";
+            if(mysqli_query($conn,$sqlInsert)){
+                //session_start();
+                $_SESSION["create"] = "Product Added Successfully!";
+                echo "<script>
+                        swal({
+                            title: 'Product Added Successfully!',
+                          
+                            icon: 'success',
+                            button: 'OK'
+                        }).then(function() {
+                            window.location.href = 'showlist.php';
+                        });
+                    </script>";
+
+
+                //header("Location:showlist.php");
+            } 
+
+            
+    else{
+        die("Something went wrong");
+    }
+}
+
+        ?>
+        
 
     
 
@@ -35,7 +71,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
             <a href="index.php" class="btn btn-primary">Back</a>
             </div>
     </header> 
-    <form action="process.php" method="post">
+    <form action="addproduct.php" method="post">
             <!-- <div class="form-elemnt my-4">
                 <input type="text" class="form-control" name="title" placeholder="ProductTitle:">
             </div> -->
@@ -50,7 +86,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
                     <option value="SportsAccessories">SportsAccessories</option>
                     <option value="MobileAccessories">MobileAccessories</option>
                 </select> <br>   
-                <label for="profile_image">Upload Image:</label>
+                <label for="product_image">Upload Image:</label>
                 <input type="file" class="form-control" name="profile_image" id="profile_image" accept="image/*"><br>
 
                 <input type="submit" name="submit" value="Add Products" class="btn btn-primary" style="justify-content-center" >
