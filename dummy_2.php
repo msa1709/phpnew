@@ -93,3 +93,159 @@
   </div>
   </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <title>Book List</title>
+    <style> 
+
+       table {
+        width:10%; 
+        margin-left:20%;
+       }
+
+        table  td, table th{
+        vertical-align:middle;
+        text-align:start;
+        padding:20px!important;
+        } 
+        @media (max-width: 500px) {
+            table td, table th {
+                padding: 10px !important;
+                text-align: center;
+            } 
+            table {
+                width: 50%; /* Ensure table takes full width on small screens */
+                margin-left: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Require the menu -->
+<?php require 'index.php'; ?>
+    <div class="container my-4">
+        <header class="d-flex justify-content-center my-4"><br>
+            <h1>Product List</h1>
+             <div>
+                <!-- <a href="addproduct.php" class="btn btn-primary">Add Products</a> -->
+            </div>
+            <!-- <div>
+                <a href="index.php" class="btn btn-primary">back</a>
+            </div>  -->
+        </header>
+     
+        
+        <table class="table table-bordered border-danger table-sm">
+        <thead>
+            <tr class="table-dark">
+                <th style="width:10%">id</th>
+                <th style="width:10%">Productname</th>
+                <th style="width:10%">Producttype</th> 
+                <th style="width:20%">Product_image</th>
+                <th>Function</th>
+                <!-- <th>Action</th>  -->
+            </tr>
+        </thead>
+    <tbody id="productTableBody">
+        
+        <?php
+        include('connect.php');
+        $sqlSelect = "SELECT * FROM products where Trash =0";
+        $result = mysqli_query($conn,$sqlSelect);
+        while($data = mysqli_fetch_array($result)){
+            ?>
+            <tr id="row-<?php echo $data['id']; ?>">
+                <td><?php echo $data['id']; ?></td>
+                <td><?php echo $data['product_name']; ?></td>
+                <td><?php echo $data['product_type']; ?></td> 
+                <td><?php echo $data['product_image']; ?></td>
+           
+                <td>
+                 
+                    <a href="edit.php?id=<?php echo $data['id']; ?>" class="btn btn-warning">Edit</a>
+                    <!-- <a href="delete.php?id=<?php// echo $data['id']; ?>" onclick='deleteRecord(this)' class="btn btn-danger">Delete</a> -->
+                    <!-- <button class="btn btn-danger" onclick="deleteProduct(<?php// echo $data['id']; ?>)">Delete</button> -->
+                    <a href="javascript:void(0);" onclick="deleteProduct(<?php echo $data['id']; ?>)" class="btn btn-danger">Delete</a>
+
+                 
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
+           
+     </tbody>
+        </table> 
+
+
+    </div> 
+    <script>
+              function deleteProduct(productId) {
+                console.log("Deleting product with ID:", productId);  // Log the product ID for debugging
+                // Check if productId is valid
+                if (!productId) {
+                     console.log("Product ID is missing or invalid.");
+                     return;  // Exit the function if no productId
+                      }
+                if (confirm("Are you sure you want to delete this product?")) {
+                     $.ajax({
+                        url: 'delete_product.php',
+                        type: 'POST',
+                         data: { id: productId },  // Ensure the data is sent properly
+                          success: function(response) {
+                            console.log("Server response:", response);  // Log the server response
+                             if (response.trim() === 'success') {  // Ensure the response is 'success
+                                 $('#row-' + productId).remove();  // Remove the product row from the table
+                                  alert('Product deleted successfully!');
+                                } else {
+                                    alert('Error deleting product: ' + response);  // Display the server error
+                                 },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log("AJAX error:", textStatus, errorThrown);  // Log AJAX errors
+                                    alert('An error occurred. Please try again.');
+                                 }
+                            });
+                        }
+                 }
+
+
+
+
+
+
+
+//         function deleteProduct(productId) {
+//             console.log("Deleting product with ID:", productId);
+//             if (confirm("Are you sure you want to delete this product?")) {
+//                  $.ajax({
+//                     url: 'delete.php',
+//                     type: 'POST',
+//                     data: { "id": productId },
+//                     success: function(response) {
+//                         console.log("Server response:", response);
+//                          if (response === 'success') { 
+//                             $('#row-' + productId).remove();
+//                             alert('Product deleted successfully!');
+//                         } else {
+//                              alert('Error deleting product. Please try again.');
+//                         }
+//                 },
+//                error: function() {
+//                 alert('An error occurred. Please try again.');
+//             }
+//         });
+//     }
+// }
+
+</script>
+</body>
+</html>

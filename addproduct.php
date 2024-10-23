@@ -26,42 +26,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
   <?php require 'index.php'; ?>
 
     <div class="container my-5"> 
-        <?php 
-        include('connect.php');
-        if (isset($_POST["submit"])) {
-            /*$title = mysqli_real_escape_string($conn, $_POST["title"]);
-            $type = mysqli_real_escape_string($conn, $_POST["type"]);*/
-            $productname = mysqli_real_escape_string($conn, $_POST["productname"]);
-            $producttype = mysqli_real_escape_string($conn, $_POST["producttype"]);
-            $profile_image = mysqli_real_escape_string($conn, $_POST["profile_image"]);
-
-            $sqlInsert = "INSERT INTO products(product_name,product_type,product_image) VALUES ('$productname','$producttype', '$profile_image')";
-            if(mysqli_query($conn,$sqlInsert)){
-                //session_start();
-                $_SESSION["create"] = "Product Added Successfully!";
-                echo "<script>
-                        swal({
-                            title: 'Product Added Successfully!',
-                          
-                            icon: 'success',
-                            button: 'OK'
-                        }).then(function() {
-                            window.location.href = 'showlist.php';
-                        });
-                    </script>";
-
-
-                //header("Location:showlist.php");
-            } 
-
-            
-    else{
-        die("Something went wrong");
-    }
-}
-
-        ?>
-        
+       
 
     
 
@@ -71,7 +36,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
             <a href="index.php" class="btn btn-primary">Back</a>
             </div>
     </header> 
-    <form action="addproduct.php" method="post">
+    <form action="process.php" method="post">
             <!-- <div class="form-elemnt my-4">
                 <input type="text" class="form-control" name="title" placeholder="ProductTitle:">
             </div> -->

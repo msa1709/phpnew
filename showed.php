@@ -12,8 +12,7 @@
 
 </head>
 <body>
-    
-<?php require 'index.php'; ?>
+
 <div class="container">
 	<table id="example" class="display nowrap" style="width:50%">
         <thead>
